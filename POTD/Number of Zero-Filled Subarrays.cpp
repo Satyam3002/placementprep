@@ -1,69 +1,25 @@
-class MyHashMap
+class Solution
 {
 public:
-    vector<list<pair<int, int>>> bucket;
-    int size = 10000;
-    MyHashMap()
+    long long zeroFilledSubarray(vector<int> &nums)
     {
-        bucket.resize(size);
-    }
+        long long count = 0, sum = 0;
 
-    void put(int key, int value)
-    {
-        int bucket_no = key % size;
-
-        auto &chain = bucket[bucket_no];
-
-        for (auto &it : chain)
+        for (int i = 0; i < nums.size(); i++)
         {
-            if (it.first == key)
+            if (nums[i] == 0)
             {
-                it.second = value;
-                return;
+                count++;
+            }
+            if (nums[i] != 0 || i == nums.size() - 1)
+            {
+                if (count > 0)
+                {
+                    sum += (count * (count + 1)) / 2;
+                    count = 0;
+                }
             }
         }
-        chain.emplace_back(key, value);
-    }
-
-    int get(int key)
-    {
-        int bucket_no = key % size;
-        auto &chain = bucket[bucket_no];
-
-        if (chain.empty())
-            return -1;
-
-        for (auto &it : chain)
-        {
-            if (it.first == key)
-            {
-                return it.second;
-            }
-        }
-
-        return -1;
-    }
-
-    void remove(int key)
-    {
-        int bucket_no = key % size;
-        auto &chain = bucket[bucket_no];
-
-        for (auto it = chain.begin(); it != chain.end(); it++)
-        {
-            if (it->first == key)
-            {
-                chain.erase(it);
-                return;
-            }
-        }
+        return sum;
     }
 };
-
-/**
- * Your MyHashMap object will be instantiated and called as such:
- * MyHashMap* obj = new MyHashMap();
- * obj->put(key,value);
- * int param_2 = obj->get(key);
- * obj->remove(key);
- */
