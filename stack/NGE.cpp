@@ -1,38 +1,36 @@
-// Online C++ compiler to run C++ program online
-#include <iostream>
-using namespace std;
-#include <bits/stdc++.h>
+class Solution
+{
+public:
+    vector<int> nextGreaterElement(vector<int> &nums1, vector<int> &nums2)
+    {
+        unordered_map<int, int> map;
+        stack<int> st;
+        int n = nums2.size();
 
-vector<int> nge(int arr[], int n)
-{
-    vector<int> result(n);
-    stack<int> st;
-    for (int i = n - 1; i >= 0; i--)
-    {
-        while (!st.empty() && st.top() <= arr[i])
+        for (int i = n - 1; i >= 0; i--)
         {
-            st.pop();
+            int num = nums2[i];
+            while (!st.empty() && st.top() <= nums2[i])
+            {
+                st.pop();
+            }
+            if (st.empty())
+            {
+                map[num] = -1;
+            }
+            else
+            {
+                map[num] = st.top();
+            }
+            st.push(nums2[i]);
         }
-        if (st.empty())
+
+        vector<int> ans;
+        for (int num : nums1)
         {
-            result[i] = -1;
+            ans.push_back(map[num]);
         }
-        else
-        {
-            result[i] = st.top();
-        }
-        st.push(arr[i]);
+
+        return ans;
     }
-    return result;
-}
-int main()
-{
-    int arr[] = {4, 5, 2, 25};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    vector<int> result = nge(arr, n);
-    for (int i = 0; i < n; i++)
-    {
-        cout << result[i] << " ";
-    }
-    return 0;
-}
+};
